@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /agenda.html
+
+Sitemap: /sitemap.txt

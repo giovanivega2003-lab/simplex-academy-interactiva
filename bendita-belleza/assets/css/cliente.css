@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Vista de la clienta — la copia rosa del talonario
+   ========================================================================== */
+
+/* --- La tarjeta de cita (primera pantalla) ------------------------------- */
+
+.tarjeta {
+  background: var(--copia);
+  padding-block: clamp(var(--e6), 8vw, var(--e8));
+}
+
+.tarjeta__marco {
+  display: grid;
+  gap: var(--e6);
+}
+
+@media (min-width: 58rem) {
+  .tarjeta__marco {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: var(--e8);
+    align-items: start;
+  }
+}
+
+.tarjeta h1 { color: var(--tinta); }
+
+.tarjeta h1 em {
+  display: block;
+  font-style: normal;
+  color: var(--sello);
+}
+
+.tarjeta__entrada {
+  margin-top: var(--e4);
+  max-width: 34ch;
+  font-size: clamp(1rem, 2.6vw, 1.15rem);
+  line-height: 1.5;
+  color: var(--tinta-media);
+}
+
+.tarjeta__accion { margin-top: var(--e5); }
+
+.tarjeta__accion .boton--sello {
+  font-size: 0.9375rem;
+  min-height: 56px;
+}
+
+.tarjeta__jura {
+  margin-top: var(--e3);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  max-width: 40ch;
+  color: var(--tinta-media);
+}
+
+.tarjeta__jura .icono { margin-top: 0.15em; }
+
+/* Los blancos del formulario, ya rellenos. */
+.blancos {
+  display: grid;
+  gap: var(--e4);
+  padding: var(--e5);
+  border: 3px solid var(--tinta);
+  border-radius: var(--radio);
+  background: var(--papel);
+}
+
+.blancos__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e3);
+  margin-bottom: var(--e1);
+}
+
+.blancos .renglon__valor {
+  font-size: clamp(1rem, 3.4vw, 1.2rem);
+  color: var(--sello);
+  text-align: right;
+}
+
+.blancos .rotulo { flex: 0 0 auto; }
+
+/* --- El libro de precios ------------------------------------------------- */
+
+.libro-precios { background: var(--papel); }
+
+/* Pestañas de índice: la activa se une a la hoja de abajo. */
+.indices {
+  display: flex;
+  gap: var(--e1);
+  margin-bottom: -3px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-top: var(--e2);
+}
+
+.indices::-webkit-scrollbar { display: none; }
+
+.pestana {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.65rem 1rem 0.8rem;
+  border: 3px solid var(--tinta);
+  border-bottom-width: 3px;
+  border-radius: var(--radio-chico) var(--radio-chico) 0 0;
+  background: var(--papel-honda);
+  color: var(--tinta-media);
+  font-size: 0.8125rem;
+  font-stretch: 92%;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: translateY(3px);
+  transition:
+    background-color var(--t-corto) ease,
+    color var(--t-corto) ease,
+    transform var(--t-corto) var(--sale);
+}
+
+.pestana small {
+  font-size: 0.6875rem;
+  font-stretch: 88%;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.pestana[aria-selected="true"] {
+  background: var(--copia);
+  color: var(--tinta);
+  border-bottom-color: var(--copia);
+  transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pestana:not([aria-selected="true"]):hover { color: var(--tinta); background: var(--copia-suave); }
+}
+
+.hoja-precios {
+  border: 3px solid var(--tinta);
+  border-radius: 0 var(--radio) var(--radio) var(--radio);
+  background: var(--papel);
+  overflow: hidden;
+}
+
+@media (min-width: 58rem) {
+  .hoja-precios {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  }
+}
+
+.lista-precios { padding: var(--e2) 0; }
+
+/* El renglón de servicio: toda la fila es el objetivo táctil. */
+.servicio {
+  display: block;
+  width: 100%;
+  padding: var(--e4) var(--e5);
+  text-align: left;
+  border-bottom: 1px solid var(--pauta-tenue);
+  transition: background-color var(--t-toque) ease;
+}
+
+.servicio:last-child { border-bottom: 0; }
+
+.servicio__linea { display: flex; align-items: baseline; gap: var(--e3); }
+
+.servicio__nombre {
+  flex: 0 1 auto;
+  font-size: 1.0625rem;
+  font-stretch: 104%;
+  font-weight: 680;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+
+.servicio__guia {
+  flex: 1 1 var(--e5);
+  min-width: var(--e4);
+  align-self: center;
+  border-bottom: 2px dotted var(--pauta);
+  transform: translateY(0.18em);
+  transition: border-color var(--t-toque) ease;
+}
+
+.servicio__precio {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  font-size: 1.15rem;
+  font-stretch: 110%;
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+  color: var(--sello);
+  white-space: nowrap;
+}
+
+.servicio__precio small {
+  font-size: 0.625rem;
+  font-stretch: 86%;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-media);
+}
+
+.servicio__pie {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: var(--e2) var(--e3);
+  margin-top: var(--e2);
+}
+
+/* En pantalla angosta la descripción ocupa su propio renglón, para que las
+   marcas de tiempo y de acción queden siempre alineadas entre sí. */
+@media (max-width: 30rem) {
+  .servicio__pie { grid-template-columns: auto 1fr; }
+  .servicio__nota { grid-column: 1 / -1; }
+  .servicio__ir { justify-self: end; }
+}
+
+.servicio__nota {
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--tinta-media);
+}
+
+.servicio__tiempo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  flex: 0 0 auto;
+  font-size: 0.6875rem;
+  font-stretch: 88%;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-media);
+}
+
+.servicio__ir {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 0.6875rem;
+  font-stretch: 88%;
+  font-weight: 720;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sello);
+}
+
+.servicio__ir .icono { transition: transform var(--t-toque) var(--sale); }
+
+@media (hover: hover) and (pointer: fine) {
+  .servicio:hover { background: var(--copia-suave); }
+  .servicio:hover .servicio__guia { border-bottom-color: var(--sello); }
+  .servicio:hover .servicio__ir .icono { transform: translateX(3px); }
+}
+
+.servicio:active { background: var(--copia); }
+
+/* Columna del catálogo impreso */
+.columna-flyer {
+  padding: var(--e5);
+  background: var(--papel-honda);
+  border-top: 1px solid var(--pauta-tenue);
+  display: grid;
+  gap: var(--e4);
+  align-content: start;
+}
+
+@media (min-width: 58rem) {
+  .columna-flyer {
+    border-top: 0;
+    border-left: 1px solid var(--pauta-tenue);
+  }
+}
+
+.flyer-boton {
+  display: block;
+  width: 100%;
+  border: 2px solid var(--tinta);
+  border-radius: var(--radio-chico);
+  overflow: hidden;
+  background: var(--papel);
+  transition: transform var(--t-corto) var(--sale);
+}
+
+.flyer-boton img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.flyer-boton__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e2);
+  padding: var(--e3);
+  border-top: 2px solid var(--tinta);
+  font-size: 0.6875rem;
+  font-stretch: 88%;
+  font-weight: 720;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flyer-boton:hover { transform: translateY(-2px); }
+}
+
+/* --- Cómo funciona ------------------------------------------------------- */
+
+.pasos { display: grid; gap: 0; max-width: 46rem; }
+
+.paso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--e3) var(--e4);
+  padding-block: var(--e4);
+  border-bottom: 1px solid var(--pauta-tenue);
+}
+
+.paso:first-child { border-top: 1px solid var(--pauta-tenue); }
+
+.paso__marca {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--tinta);
+  border-radius: 50%;
+  color: var(--sello);
+}
+
+.paso__texto { max-width: 60ch; }
+.paso__texto p { margin-top: var(--e1); color: var(--tinta-media); font-size: 0.9375rem; }
+
+/* --- Visítanos ----------------------------------------------------------- */
+
+.visita { background: var(--copia-suave); }
+
+.visita__marco { display: grid; gap: var(--e6); }
+
+@media (min-width: 52rem) {
+  .visita__marco { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); gap: var(--e8); }
+}
+
+.horarios {
+  border: 3px solid var(--tinta);
+  border-radius: var(--radio);
+  background: var(--papel);
+  padding: var(--e5);
+}
+
+.horarios .renglon { padding-block: var(--e3); }
+.horarios .renglon + .renglon { border-top: 1px solid var(--pauta-tenue); }
+
+.horarios .renglon__valor { font-size: 1rem; }
+
+.horarios__cerrado .renglon__valor { color: var(--marca-alta); }
+
+.direccion {
+  margin-top: var(--e4);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e3);
+  margin-top: var(--e5);
+}
+
+/* --- La copia de la cita (éxito) ----------------------------------------- */
+
+.copia-cita {
+  position: relative;
+  border: 3px solid var(--tinta);
+  border-radius: var(--radio);
+  background: var(--copia-suave);
+  padding: var(--e5);
+  overflow: hidden;
+}
+
+.copia-cita__sello {
+  position: absolute;
+  top: var(--e4);
+  right: var(--e4);
+  font-size: 0.75rem;
+  opacity: 0;
+  transform: rotate(-14deg) scale(1.28);
+  transition:
+    opacity var(--t-sello) var(--sale),
+    transform var(--t-sello) var(--sale);
+}
+
+.copia-cita__sello[data-estampado="si"] {
+  opacity: 0.88;
+  transform: rotate(-6deg) scale(1);
+}
+
+.copia-cita .renglon { padding-block: var(--e3); }
+.copia-cita .renglon + .renglon { border-top: 1px solid var(--pauta-tenue); }
+.copia-cita .renglon__valor { max-width: 68%; text-align: right; }
+.copia-cita__referencia { word-break: break-all; }
+
+@media (prefers-reduced-motion: reduce) {
+  .copia-cita__sello { transform: rotate(-6deg) scale(1); transition: opacity 140ms ease; }
+  .copia-cita__sello[data-estampado="si"] { transform: rotate(-6deg) scale(1); }
+}
+
+/* --- Bloque de calendario ------------------------------------------------ */
+
+.calendario {
+  display: grid;
+  gap: var(--e3);
+  padding: var(--e4);
+  border: 2px solid var(--pauta);
+  border-radius: var(--radio-chico);
+  background: var(--papel);
+}
+
+.calendario__botones {
+  display: grid;
+  gap: var(--e2);
+}
+
+@media (min-width: 30rem) {
+  .calendario__botones { grid-template-columns: 1fr 1fr; }
+}
+
+/* --- Mis solicitudes ----------------------------------------------------- */
+
+.mis-citas { display: grid; gap: var(--e3); }
+
+.mi-cita {
+  display: grid;
+  gap: var(--e3);
+  padding: var(--e4);
+  border: 2px solid var(--pauta-tenue);
+  border-radius: var(--radio-chico);
+  background: var(--papel);
+}
+
+.mi-cita__alto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e2);
+}
+
+.mi-cita__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e2);
+}
+
+.mi-cita__acciones .boton { min-height: 42px; font-size: 0.75rem; padding-inline: 0.85rem; }
+
+/* --- Diálogo del catálogo impreso ---------------------------------------- */
+
+.hoja-flyer {
+  width: min(46rem, calc(100vw - var(--e4) * 2));
+  background: var(--tinta);
+}
+
+.hoja-flyer img {
+  width: 100%;
+  max-height: 84dvh;
+  object-fit: contain;
+}
+
+.hoja-flyer .hoja__cierra { color: var(--papel); background: rgba(46, 20, 53, 0.55); }
+
+/* --- Sin JavaScript ------------------------------------------------------ */
+
+.sin-js {
+  margin: var(--e4) auto;
+  width: min(var(--ancho), 100% - var(--margen) * 2);
+}

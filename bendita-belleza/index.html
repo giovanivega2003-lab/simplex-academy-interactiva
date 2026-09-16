@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fbf7f5">
+<title>Bendita Belleza · Beauty Studio · Santa Cruz de la Sierra</title>
+<meta name="description" content="Catálogo de precios y solicitud de cita del Bendita Belleza Beauty Studio. Uñas, cabello, maquillaje y peinados en el Mercado Estación Argentina, Santa Cruz de la Sierra.">
+<link rel="icon" href="assets/img/sello-128.webp" type="image/webp">
+<link rel="apple-touch-icon" href="assets/img/sello-512.webp">
+<meta property="og:title" content="Bendita Belleza · Beauty Studio">
+<meta property="og:description" content="Precios publicados y solicitud de cita por WhatsApp. Santa Cruz de la Sierra.">
+<meta property="og:image" content="assets/img/sello-512.webp">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_BO">
+<link rel="preload" href="assets/fuentes/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/libreta.css">
+<link rel="stylesheet" href="assets/css/cliente.css">
+</head>
+<body>
+
+<header class="membrete">
+  <div class="marco">
+    <div class="membrete__fila">
+      <img class="membrete__sello" src="assets/img/sello-512.webp" width="54" height="54"
+           alt="" fetchpriority="high">
+      <span class="membrete__nombre">Bendita Belleza<small>Beauty Studio</small></span>
+    </div>
+    <hr class="regla" style="margin-top:.75rem">
+    <div class="membrete__pie">
+      <a class="membrete__dato" href="tel:+59175323254">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-telefono"></use></svg>
+        +591 75323254
+      </a>
+      <span class="membrete__dato">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-lugar"></use></svg>
+        Mercado Estación Argentina
+      </span>
+      <span class="membrete__dato">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-reloj"></use></svg>
+        Lun a sáb · 08:00–20:00
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="principal">
+
+  <!-- La tarjeta de cita ------------------------------------------------- -->
+  <section class="tarjeta" aria-labelledby="titulo-tarjeta">
+    <div class="marco tarjeta__marco">
+      <div>
+        <h1 id="titulo-tarjeta">Pide tu cita<em>con el precio<br>ya sabido.</em></h1>
+        <p class="tarjeta__entrada">Uñas, cabello, maquillaje y peinados con Verónica Ribera,
+          en el Mercado Estación Argentina.</p>
+        <div class="tarjeta__accion">
+          <button class="boton boton--sello boton--ancho" type="button" data-abrir-solicitud>
+            <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-lapiz"></use></svg>
+            Agendar mi cita
+          </button>
+          <p class="tarjeta__jura apunte">
+            <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-info"></use></svg>
+            <span>Preparás el pedido acá y lo mandás por WhatsApp. Verónica te confirma la hora.
+              No se cobra anticipo.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="blancos">
+        <div class="blancos__titulo">
+          <span class="rotulo">Tarjeta de cita</span>
+          <span class="sello sello--espera">Sin anticipo</span>
+        </div>
+        <p class="renglon">
+          <span class="rotulo">Servicio</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor cifra" id="blanco-servicio">—</span>
+        </p>
+        <p class="renglon">
+          <span class="rotulo">Días</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor" id="blanco-fecha">—</span>
+        </p>
+        <p class="renglon">
+          <span class="rotulo">Precio</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor cifra" id="blanco-precio">—</span>
+        </p>
+        <p class="apunte">Todo el catálogo tiene precio publicado. Donde el precio varía según
+          el largo del cabello, está escrito el rango completo.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="perforado" aria-hidden="true">
+
+  <!-- El libro de precios ------------------------------------------------- -->
+  <section class="tramo libro-precios" id="servicios" aria-labelledby="titulo-precios">
+    <div class="marco">
+      <div class="encabeza-tramo">
+        <h2 id="titulo-precios">El libro<br>de precios.</h2>
+        <p class="prosa">Veinticuatro servicios, con su duración de referencia para que sepas
+          cuánto tiempo apartar. Los precios son en bolivianos y se pagan en el salón.</p>
+      </div>
+
+      <div class="indices" id="indices" role="tablist" aria-label="Categorías de servicios"></div>
+
+      <div class="hoja-precios">
+        <div class="lista-precios" id="lista-precios" role="tabpanel" tabindex="0"></div>
+
+        <aside class="columna-flyer">
+          <button class="flyer-boton" id="flyer-boton" type="button">
+            <img id="flyer-imagen" src="assets/img/precios-unas-min.webp"
+                 alt="Catálogo impreso de uñas del salón"
+                 width="440" height="660" loading="lazy" decoding="async">
+            <span class="flyer-boton__pie">
+              Ver el catálogo impreso
+              <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-flecha"></use></svg>
+            </span>
+          </button>
+          <p class="apunte" id="nota-categoria"></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mis solicitudes ----------------------------------------------------- -->
+  <section class="tramo tramo--corto" id="bloque-mis-citas" aria-labelledby="titulo-mis-citas" hidden>
+    <div class="marco">
+      <div class="encabeza-tramo">
+        <h2 id="titulo-mis-citas">Tu copia.</h2>
+        <p class="prosa">Estas son las solicitudes que preparaste en este teléfono. Sirven para
+          reenviar el mensaje o volver a guardar la cita en tu calendario. El salón solo se
+          entera de las que enviaste por WhatsApp.</p>
+      </div>
+      <div class="mis-citas" id="mis-citas"></div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona ------------------------------------------------------- -->
+  <section class="tramo tramo--corto" aria-labelledby="titulo-pasos">
+    <div class="marco">
+      <div class="encabeza-tramo">
+        <h2 id="titulo-pasos">Cómo se pide<br>una cita.</h2>
+      </div>
+      <div class="pasos">
+        <div class="paso">
+          <span class="paso__marca" aria-hidden="true">
+            <svg class="icono" viewBox="0 0 24 24"><use href="#i-libro"></use></svg>
+          </span>
+          <div class="paso__texto">
+            <h3>Elegís el servicio y ves el precio</h3>
+            <p>Cada renglón del libro trae el precio de catálogo y el tiempo que se aparta
+              para atenderte.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <span class="paso__marca" aria-hidden="true">
+            <svg class="icono" viewBox="0 0 24 24"><use href="#i-lapiz"></use></svg>
+          </span>
+          <div class="paso__texto">
+            <h3>Pedís el día y la hora que te sirven</h3>
+            <p>Dentro del horario de atención. Podés dejar tu correo si querés que la cita
+              te quede guardada en el calendario del teléfono.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <span class="paso__marca" aria-hidden="true">
+            <svg class="icono" viewBox="0 0 24 24"><use href="#i-whatsapp"></use></svg>
+          </span>
+          <div class="paso__texto">
+            <h3>Lo mandás por WhatsApp y Verónica confirma</h3>
+            <p>El mensaje se abre escrito, con todos los datos. Solo tenés que darle enviar.
+              La cita queda en firme cuando ella responde.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visítanos ----------------------------------------------------------- -->
+  <section class="tramo visita" id="visitanos" aria-labelledby="titulo-visita">
+    <div class="marco visita__marco">
+      <div>
+        <h2 id="titulo-visita">Te esperamos<br>en el mercado.</h2>
+        <p class="direccion">Mercado Estación Argentina<br>
+          Cuarto anillo, sector Tres Pasos al Frente<br>
+          Santa Cruz de la Sierra, Bolivia</p>
+        <div class="acciones">
+          <a class="boton boton--linea" href="https://maps.app.goo.gl/kN8Gx93rWEbwNGDp6"
+             target="_blank" rel="noopener noreferrer">
+            <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-lugar"></use></svg>
+            Cómo llegar
+          </a>
+          <a class="enlace" data-whatsapp="Hola, quisiera información sobre los servicios de Bendita Belleza.">Escribir por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="horarios">
+        <span class="rotulo">Horarios de atención</span>
+        <p class="renglon">
+          <span>Lunes</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor cifra">08:00 – 20:00</span>
+        </p>
+        <p class="renglon">
+          <span>Martes a sábado</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor cifra">09:00 – 20:00</span>
+        </p>
+        <p class="renglon horarios__cerrado">
+          <span>Domingo</span>
+          <span class="renglon__guia" aria-hidden="true"></span>
+          <span class="renglon__valor">Cerrado</span>
+        </p>
+        <p class="apunte" style="margin-top:1rem">Todos los horarios son de Bolivia.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="marco pie__fila">
+    <span class="membrete__nombre">Bendita Belleza<small>Beauty Studio</small></span>
+    <a class="enlace" data-whatsapp="Hola, quisiera información sobre Bendita Belleza.">WhatsApp</a>
+  </div>
+  <div class="marco" style="margin-top:1.5rem">
+    <p class="apunte">Precios de catálogo, sujetos a evaluación del servicio. Las solicitudes
+      preparadas en esta página se guardan solo en tu teléfono y no llegan al salón hasta que
+      las envías por WhatsApp.</p>
+  </div>
+</footer>
+
+<!-- Diálogo: solicitud --------------------------------------------------- -->
+<dialog id="dialogo-solicitud" aria-labelledby="titulo-solicitud">
+  <div class="hoja">
+
+    <div id="paso-formulario">
+      <div class="hoja__cabeza">
+        <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+        </button>
+        <h2 id="titulo-solicitud">Tu cita.</h2>
+        <p class="apunte" style="margin-top:.5rem;color:var(--tinta-media)">
+          Completá los blancos. Al final te damos el mensaje listo para enviar.</p>
+      </div>
+
+      <div class="hoja__cuerpo">
+        <div class="aviso" id="aviso-guardado" hidden>
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-alerta"></use></svg>
+          <span>Este navegador no deja guardar tu copia. Vas a poder enviar la solicitud igual,
+            pero no quedará guardada acá al cerrar.</span>
+        </div>
+
+        <form id="form-solicitud" novalidate>
+          <div class="campos">
+            <label class="campo campo--ancho">
+              <span class="rotulo">Servicio</span>
+              <select id="f-servicio" required></select>
+            </label>
+
+            <label class="campo campo--ancho" id="campo-variante">
+              <span class="rotulo">Largo del cabello</span>
+              <select id="f-variante"></select>
+            </label>
+
+            <div class="campo campo--ancho" id="campo-diseno">
+              <label class="casilla">
+                <input type="checkbox" id="f-diseno">
+                <span>Diseño elaborado o pedrería <span class="apunte">(+20 Bs y 30 min más)</span></span>
+              </label>
+            </div>
+
+            <label class="campo">
+              <span class="rotulo">Fecha</span>
+              <input type="date" id="f-fecha" required>
+            </label>
+
+            <label class="campo">
+              <span class="rotulo">Hora que pedís</span>
+              <select id="f-hora" required></select>
+            </label>
+
+            <p class="apunte campo--ancho" id="nota-horas"></p>
+
+            <label class="campo">
+              <span class="rotulo">Tu nombre</span>
+              <input id="f-nombre" autocomplete="name" maxlength="100" required
+                     placeholder="Nombre y apellido" enterkeyhint="next">
+            </label>
+
+            <label class="campo">
+              <span class="rotulo">Tu WhatsApp</span>
+              <input type="tel" id="f-telefono" autocomplete="tel" inputmode="tel" maxlength="24"
+                     required placeholder="75323254" enterkeyhint="next">
+            </label>
+
+            <label class="campo campo--ancho">
+              <span class="rotulo">Tu correo
+                <span class="campo__opcional">opcional</span></span>
+              <input type="email" id="f-correo" autocomplete="email" inputmode="email"
+                     maxlength="254" autocapitalize="none" autocorrect="off"
+                     placeholder="para la invitación de calendario" enterkeyhint="next">
+            </label>
+
+            <p class="apunte campo--ancho" style="margin-top:-.25rem">
+              Si dejás tu correo, Verónica puede mandarte la invitación de Google Calendar al
+              confirmar: te llega el aviso y la cita queda guardada en tu teléfono. Igual podés
+              guardarla vos en el paso siguiente, sin dar el correo.</p>
+
+            <label class="campo campo--ancho">
+              <span class="rotulo">Observaciones
+                <span class="campo__opcional">opcional</span></span>
+              <textarea id="f-notas" rows="2" maxlength="1000"
+                        placeholder="Algún detalle de tu servicio…"></textarea>
+            </label>
+          </div>
+
+          <div class="blancos" style="margin-top:1.5rem;background:var(--copia-suave)">
+            <p class="renglon">
+              <span class="rotulo">Precio de catálogo</span>
+              <span class="renglon__guia" aria-hidden="true"></span>
+              <span class="renglon__valor cifra" id="resumen-precio">—</span>
+            </p>
+            <p class="renglon">
+              <span class="rotulo">Tiempo que se aparta</span>
+              <span class="renglon__guia" aria-hidden="true"></span>
+              <span class="renglon__valor cifra" id="resumen-duracion">—</span>
+            </p>
+            <p class="apunte" id="resumen-detalle"></p>
+          </div>
+
+          <label class="casilla" style="margin-top:1rem">
+            <input type="checkbox" id="f-acepto" required>
+            <span>Entiendo que la cita queda por confirmar y que tengo que enviarla por WhatsApp
+              para que el salón la reciba.</span>
+          </label>
+
+          <p class="error-campo" id="error-solicitud" role="alert"></p>
+
+          <button class="boton boton--sello boton--ancho" type="submit" id="f-enviar">
+            Preparar mi solicitud
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="paso-copia" hidden>
+      <div class="hoja__cabeza">
+        <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+        </button>
+        <h2>Lista para<br>enviar.</h2>
+      </div>
+
+      <div class="hoja__cuerpo">
+        <div class="copia-cita">
+          <span class="sello sello--espera copia-cita__sello" id="copia-sello" data-estampado="no">
+            Por confirmar
+          </span>
+          <span class="rotulo">Copia de tu cita</span>
+          <p class="renglon">
+            <span class="rotulo">Servicio</span>
+            <span class="renglon__guia" aria-hidden="true"></span>
+            <span class="renglon__valor" id="copia-servicio"></span>
+          </p>
+          <p class="renglon">
+            <span class="rotulo">Fecha</span>
+            <span class="renglon__guia" aria-hidden="true"></span>
+            <span class="renglon__valor" id="copia-fecha"></span>
+          </p>
+          <p class="renglon">
+            <span class="rotulo">Hora</span>
+            <span class="renglon__guia" aria-hidden="true"></span>
+            <span class="renglon__valor cifra" id="copia-hora"></span>
+          </p>
+          <p class="renglon">
+            <span class="rotulo">Precio</span>
+            <span class="renglon__guia" aria-hidden="true"></span>
+            <span class="renglon__valor cifra" id="copia-precio"></span>
+          </p>
+          <p class="renglon">
+            <span class="rotulo">Clienta</span>
+            <span class="renglon__guia" aria-hidden="true"></span>
+            <span class="renglon__valor" id="copia-nombre"></span>
+          </p>
+          <p class="apunte copia-cita__referencia" style="margin-top:.75rem">Referencia
+            <span class="cifra" id="copia-referencia"></span></p>
+        </div>
+
+        <a class="boton boton--sello boton--ancho" id="copia-whatsapp" style="margin-top:1.5rem">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-whatsapp"></use></svg>
+          Enviar por WhatsApp
+        </a>
+        <p class="apunte" style="margin-top:.5rem">Se abre WhatsApp con el texto escrito.
+          Revisalo y dale enviar. Necesitás internet.</p>
+
+        <div class="calendario" style="margin-top:1.5rem">
+          <span class="rotulo">Guardar en tu calendario</span>
+          <p class="apunte">La guardás como horario pedido, con aviso un día antes y dos horas
+            antes. Si después Verónica cambia la hora, corregila en tu calendario.</p>
+          <div class="calendario__botones">
+            <a class="boton boton--linea" id="copia-google" target="_blank" rel="noopener noreferrer">
+              <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-calendario"></use></svg>
+              Google Calendar
+            </a>
+            <button class="boton boton--linea" type="button" id="copia-ics">
+              <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-manzana"></use></svg>
+              iPhone y otros
+            </button>
+          </div>
+          <p class="apunte">En iPhone, el botón de la derecha baja un archivo que se abre solo
+            en el Calendario: tocá «Agregar». En Android también sirve.</p>
+        </div>
+
+        <button class="boton boton--quieto boton--ancho" type="button" data-cerrar
+                style="margin-top:1rem">Listo</button>
+      </div>
+    </div>
+
+  </div>
+</dialog>
+
+<!-- Diálogo: catálogo impreso -------------------------------------------- -->
+<dialog id="dialogo-flyer" class="hoja-flyer" aria-label="Catálogo impreso de precios">
+  <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar catálogo">
+    <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+  </button>
+  <img id="flyer-grande" src="assets/img/precios-unas.webp"
+       alt="Catálogo impreso de precios" loading="lazy" decoding="async">
+</dialog>
+
+<div id="recado" class="recado" role="status" hidden></div>
+
+<noscript>
+  <div class="sin-js aviso aviso--alta">
+    <span>Para ver el catálogo y pedir una cita necesitás activar JavaScript.
+      También podés escribir directamente al <a class="enlace" href="tel:+59175323254">+591 75323254</a>.</span>
+  </div>
+</noscript>
+
+<script src="assets/js/estudio.js"></script>
+<script src="assets/js/tiempo.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/calendario.js"></script>
+<script src="assets/js/reglas.js"></script>
+<script src="assets/js/cliente.js"></script>
+</body>
+</html>

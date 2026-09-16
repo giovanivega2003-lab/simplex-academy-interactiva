@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es-BO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#2f5e45">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Libro de citas · Bendita Belleza</title>
+<meta name="description" content="Agenda privada del Bendita Belleza Beauty Studio.">
+<link rel="icon" href="assets/img/sello-128.webp" type="image/webp">
+<link rel="apple-touch-icon" href="assets/img/sello-512.webp">
+<link rel="preload" href="assets/fuentes/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/libreta.css">
+<link rel="stylesheet" href="assets/css/agenda.css">
+</head>
+<body class="libro">
+
+<!-- Portón de acceso ------------------------------------------------------ -->
+<div id="porton" class="porton" hidden>
+  <form class="porton__hoja" id="form-porton" novalidate>
+    <img class="porton__sello" src="assets/img/sello-512.webp" width="72" height="72" alt="">
+    <h1 id="porton-titulo">Tu libro de citas.</h1>
+    <p class="apunte" id="porton-texto" style="text-align:center"></p>
+
+    <label class="campo">
+      <span class="rotulo">Clave</span>
+      <input type="password" id="p-clave" autocomplete="current-password" inputmode="text"
+             autocapitalize="none" autocorrect="off" maxlength="64" required enterkeyhint="go">
+    </label>
+
+    <label class="campo" id="campo-repetir" hidden>
+      <span class="rotulo">Repetí la clave</span>
+      <input type="password" id="p-repetir" autocomplete="new-password" inputmode="text"
+             autocapitalize="none" autocorrect="off" maxlength="64" enterkeyhint="go">
+    </label>
+
+    <p class="error-campo" id="error-porton" role="alert"></p>
+
+    <button class="boton boton--sello boton--ancho" type="submit" id="porton-enviar">
+      Abrir el libro
+    </button>
+
+    <button class="boton boton--quieto porton__olvido" type="button" id="porton-olvido" hidden>
+      Olvidé mi clave
+    </button>
+
+    <div class="aviso">
+      <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-llave"></use></svg>
+      <span><strong>Tus citas no están en internet.</strong> Se guardan solo en este aparato.
+        Quien abra este enlace desde otro teléfono encuentra un libro vacío. La clave protege
+        este aparato, que es donde están los datos; sin servidor no es una cerradura contra
+        alguien con conocimientos técnicos y acceso físico al teléfono.</span>
+    </div>
+  </form>
+</div>
+
+<!-- El libro -------------------------------------------------------------- -->
+<div id="libro" hidden>
+
+  <header class="membrete membrete--libro">
+    <div class="marco">
+      <div class="membrete__fila">
+        <img class="membrete__sello" src="assets/img/sello-512.webp" width="54" height="54" alt="">
+        <span class="membrete__nombre">Libro de citas<small>Verónica Ribera</small></span>
+      </div>
+      <hr class="regla" style="margin-top:.75rem">
+      <div class="membrete__pie">
+        <a class="membrete__dato" href="index.html">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-hoja"></use></svg>
+          Ver la página de las clientas
+        </a>
+        <button class="membrete__dato" type="button" id="cerrar-libro">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-llave"></use></svg>
+          Cerrar el libro
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="marco" style="padding-bottom:4rem">
+
+    <h1 class="oculto-visual">Libro de citas de Bendita Belleza</h1>
+
+    <div class="barra-dia">
+      <div class="paso-dia">
+        <button class="boton-icono" type="button" id="dia-anterior" aria-label="Día anterior">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-izq"></use></svg>
+        </button>
+        <label class="oculto-visual" for="fecha-agenda">Fecha del libro</label>
+        <input type="date" id="fecha-agenda">
+        <button class="boton-icono" type="button" id="dia-siguiente" aria-label="Día siguiente">
+          <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-der"></use></svg>
+        </button>
+      </div>
+      <button class="boton boton--linea" type="button" id="dia-hoy">Hoy</button>
+      <label class="casilla"><input type="checkbox" id="todas-fechas"> Ver todas las fechas</label>
+      <span style="flex:1 1 auto"></span>
+      <button class="boton boton--sello" type="button" id="nueva-cita">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-mas"></use></svg>
+        Nueva cita
+      </button>
+      <button class="boton boton--linea" type="button" id="nuevo-bloqueo">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-veda"></use></svg>
+        Bloquear
+      </button>
+    </div>
+
+    <div class="aviso aviso--alta" id="aviso-almacen" hidden></div>
+
+    <div class="cuentas" id="cuentas"></div>
+
+    <div class="filtros">
+      <label class="campo">
+        <span class="oculto-visual">Buscar clienta, teléfono o correo</span>
+        <input type="search" id="buscar" placeholder="Buscar clienta, teléfono o correo…"
+               maxlength="120" enterkeyhint="search">
+      </label>
+      <label class="campo" style="flex:0 1 14rem">
+        <span class="oculto-visual">Filtrar por estado</span>
+        <select id="filtro-estado">
+          <option value="all">Todos los estados</option>
+          <option value="pending">Por confirmar</option>
+          <option value="confirmed">Confirmadas</option>
+          <option value="completed">Atendidas</option>
+          <option value="cancelled">Canceladas</option>
+          <option value="block">Bloqueos</option>
+        </select>
+      </label>
+      <button class="boton boton--linea" type="button" id="exportar-respaldo" style="flex:0 0 auto">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-descarga"></use></svg>
+        Respaldo
+      </button>
+      <button class="boton boton--linea" type="button" id="exportar-excel" style="flex:0 0 auto">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-hoja"></use></svg>
+        Excel
+      </button>
+    </div>
+
+    <p class="apunte" id="pie-agenda" style="margin-top:1rem"></p>
+    <div id="renglones" class="renglones" aria-live="polite"></div>
+
+    <details class="ajustes">
+      <summary>
+        Duraciones y respaldos
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-abajo"></use></svg>
+      </summary>
+      <div class="ajustes__cuerpo">
+        <div>
+          <h2 class="ajustes__titulo">Restaurar un respaldo</h2>
+          <p class="apunte" style="margin-top:.35rem">Reemplaza todo lo que hay en este
+            navegador por el contenido de un archivo de respaldo. Sirve para pasar la agenda a
+            otro teléfono o para recuperarla después de olvidar la clave. Los botones
+            <strong>Respaldo</strong> y <strong>Excel</strong> de arriba son los que descargan:
+            bajá el respaldo seguido, es lo único que te devuelve las citas si perdés el
+            aparato o la clave.</p>
+          <div class="acciones" style="margin-top:1rem">
+            <button class="boton boton--linea" type="button" id="importar-respaldo">
+              Restaurar un respaldo
+            </button>
+            <input type="file" id="archivo-respaldo" accept=".json,application/json" hidden>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="ajustes__titulo">Duración por servicio</h2>
+          <p class="apunte" style="margin-top:.35rem">Los minutos que se apartan en la agenda.
+            Se aplican a las citas nuevas; las ya registradas mantienen su duración. El diseño
+            elaborado suma 30 minutos.</p>
+          <form id="form-duraciones" style="margin-top:1rem">
+            <div id="campos-duracion" class="rejilla-duraciones"></div>
+            <button class="boton boton--sello" type="submit" style="margin-top:1.25rem">
+              Guardar duraciones
+            </button>
+          </form>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer class="pie">
+    <div class="marco">
+      <p class="apunte">Agenda local de Bendita Belleza. Los datos se guardan en este navegador
+        y no se envían a ningún servidor.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- Diálogo: nueva cita --------------------------------------------------- -->
+<dialog id="dialogo-nueva" aria-labelledby="titulo-nueva">
+  <div class="hoja">
+    <div class="hoja__cabeza">
+      <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+      </button>
+      <h2 id="titulo-nueva">Nueva cita.</h2>
+      <p class="apunte" style="margin-top:.5rem">Para las citas que acordás por WhatsApp,
+        por teléfono o en el salón.</p>
+    </div>
+    <div class="hoja__cuerpo">
+      <form id="form-nueva" novalidate>
+        <div class="campos">
+          <label class="campo campo--ancho">
+            <span class="rotulo">Servicio</span>
+            <select id="n-servicio" required></select>
+          </label>
+          <label class="campo campo--ancho" id="n-campo-variante">
+            <span class="rotulo">Largo del cabello</span>
+            <select id="n-variante"></select>
+          </label>
+          <div class="campo campo--ancho" id="n-campo-diseno">
+            <label class="casilla">
+              <input type="checkbox" id="n-diseno">
+              <span>Diseño elaborado o pedrería <span class="apunte">(+20 Bs y 30 min)</span></span>
+            </label>
+          </div>
+          <label class="campo">
+            <span class="rotulo">Fecha</span>
+            <input type="date" id="n-fecha" required>
+          </label>
+          <label class="campo">
+            <span class="rotulo">Hora</span>
+            <select id="n-hora" required></select>
+          </label>
+          <p class="apunte campo--ancho" id="n-nota-horas"></p>
+          <label class="campo">
+            <span class="rotulo">Clienta</span>
+            <input id="n-nombre" autocomplete="name" maxlength="100" required
+                   placeholder="Nombre y apellido" enterkeyhint="next">
+          </label>
+          <label class="campo">
+            <span class="rotulo">WhatsApp</span>
+            <input type="tel" id="n-telefono" inputmode="tel" maxlength="24" required
+                   placeholder="75323254" enterkeyhint="next">
+          </label>
+          <label class="campo campo--ancho">
+            <span class="rotulo">Correo <span class="campo__opcional">opcional</span></span>
+            <input type="email" id="n-correo" inputmode="email" maxlength="254"
+                   autocapitalize="none" autocorrect="off"
+                   placeholder="para invitarla al evento de Google Calendar" enterkeyhint="next">
+          </label>
+          <label class="campo campo--ancho">
+            <span class="rotulo">Observaciones <span class="campo__opcional">opcional</span></span>
+            <textarea id="n-notas" rows="2" maxlength="1000"></textarea>
+          </label>
+        </div>
+
+        <p class="apunte cifra" id="n-resumen" style="margin-top:1rem"></p>
+        <p class="error-campo" id="error-nueva" role="alert"></p>
+        <button class="boton boton--sello boton--ancho" type="submit" id="n-enviar">
+          Guardar cita por confirmar
+        </button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<!-- Diálogo: bloqueo ------------------------------------------------------ -->
+<dialog id="dialogo-bloqueo" aria-labelledby="titulo-bloqueo">
+  <div class="hoja">
+    <div class="hoja__cabeza">
+      <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+      </button>
+      <h2 id="titulo-bloqueo">Bloquear horario.</h2>
+      <p class="apunte" style="margin-top:.5rem">Ese rato queda ocupado y no se puede agendar
+        encima.</p>
+    </div>
+    <div class="hoja__cuerpo">
+      <form id="form-bloqueo" novalidate>
+        <div class="campos">
+          <label class="campo campo--ancho">
+            <span class="rotulo">Fecha</span>
+            <input type="date" id="b-fecha" required>
+          </label>
+          <label class="campo">
+            <span class="rotulo">Desde</span>
+            <input type="time" id="b-desde" required step="300">
+          </label>
+          <label class="campo">
+            <span class="rotulo">Hasta</span>
+            <input type="time" id="b-hasta" required step="300">
+          </label>
+          <label class="campo campo--ancho">
+            <span class="rotulo">Motivo</span>
+            <input id="b-motivo" required maxlength="100"
+                   placeholder="Almuerzo, trámite, descanso…" enterkeyhint="done">
+          </label>
+        </div>
+        <p class="error-campo" id="error-bloqueo" role="alert"></p>
+        <button class="boton boton--sello boton--ancho" type="submit">Guardar bloqueo</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<!-- Diálogo: mover -------------------------------------------------------- -->
+<dialog id="dialogo-mover" aria-labelledby="titulo-mover">
+  <div class="hoja">
+    <div class="hoja__cabeza">
+      <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+      </button>
+      <h2 id="titulo-mover">Mover la cita.</h2>
+      <p class="apunte" id="mover-detalle" style="margin-top:.5rem"></p>
+    </div>
+    <div class="hoja__cuerpo">
+      <form id="form-mover" novalidate>
+        <div class="campos">
+          <label class="campo">
+            <span class="rotulo">Nueva fecha</span>
+            <input type="date" id="mover-fecha" required>
+          </label>
+          <label class="campo">
+            <span class="rotulo">Nueva hora</span>
+            <select id="mover-hora" required></select>
+          </label>
+        </div>
+        <p class="apunte" style="margin-top:1rem">La cita vuelve a «por confirmar».
+          Avisale a la clienta por WhatsApp.</p>
+        <p class="error-campo" id="error-mover" role="alert"></p>
+        <button class="boton boton--sello boton--ancho" type="submit">Guardar el nuevo horario</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<!-- Diálogo: calendario --------------------------------------------------- -->
+<dialog id="dialogo-calendario" aria-labelledby="titulo-cal">
+  <div class="hoja">
+    <div class="hoja__cabeza">
+      <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+      </button>
+      <h2 id="titulo-cal">Pasar al calendario.</h2>
+      <p class="apunte" id="cal-detalle" style="margin-top:.5rem"></p>
+    </div>
+    <div class="hoja__cuerpo">
+      <div class="aviso">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-sobre"></use></svg>
+        <span>Con el correo de la clienta, Google le manda la invitación por correo cuando
+          guardás el evento. El correo lo envía Google desde tu cuenta, no esta página.</span>
+      </div>
+
+      <label class="campo" style="margin-top:1.25rem">
+        <span class="rotulo">Correo de la clienta <span class="campo__opcional">opcional</span></span>
+        <input type="email" id="cal-correo" inputmode="email" maxlength="254"
+               autocapitalize="none" autocorrect="off" placeholder="nombre@correo.com">
+      </label>
+      <p class="apunte" id="cal-estado-correo" style="margin-top:.5rem"></p>
+      <p class="error-campo" id="error-cal" role="alert"></p>
+
+      <button class="boton boton--quieto" type="button" id="cal-guardar">
+        Guardar este correo en la cita
+      </button>
+
+      <div class="calendario" style="margin-top:1.25rem">
+        <div class="calendario__botones">
+          <a class="boton boton--sello" id="cal-google" target="_blank" rel="noopener noreferrer">
+            <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-calendario"></use></svg>
+            Crear en Google Calendar
+          </a>
+          <button class="boton boton--linea" type="button" id="cal-ics">
+            <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-descarga"></use></svg>
+            Descargar .ics
+          </button>
+        </div>
+        <p class="apunte">El .ics sirve para tu propio calendario del teléfono (iPhone, Android
+          u Outlook) y no envía nada a nadie.</p>
+      </div>
+
+      <button class="boton boton--quieto boton--ancho" type="button" data-cerrar
+              style="margin-top:1rem">Listo</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="recado" class="recado" role="status" hidden></div>
+
+<noscript>
+  <div class="sin-js aviso aviso--alta">
+    <span>El libro de citas necesita JavaScript activado.</span>
+  </div>
+</noscript>
+
+<script src="assets/js/estudio.js"></script>
+<script src="assets/js/tiempo.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/calendario.js"></script>
+<script src="assets/js/reglas.js"></script>
+<script src="assets/js/xlsx.js"></script>
+<script src="assets/js/libro.js"></script>
+</body>
+</html>
