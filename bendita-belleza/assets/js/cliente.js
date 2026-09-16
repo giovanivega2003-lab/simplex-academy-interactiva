@@ -287,7 +287,7 @@
         throw new Error('Ese correo no parece válido. Revísalo o déjalo vacío: es opcional.');
       }
       if ($('f-hora').value === '') throw new Error('Elige una hora.');
-      if (!$('f-acepto').checked) throw new Error('Confirma que enviarás la solicitud por WhatsApp.');
+      if (!$('f-acepto').checked) throw new Error('Confirmá que entendés que la cita queda por confirmar.');
 
       var fecha = $('f-fecha').value;
       var inicio = Number($('f-hora').value);
@@ -319,9 +319,36 @@
       guardar();
       pintarMisCitas();
       pintarCopia(cita);
+      enviarAlSalon(cita);
     } catch (error) {
       $('error-solicitud').textContent = error.message;
     }
+  }
+
+  /* --- Envío directo al salón ----------------------------------------------- */
+
+  /* Si el enlace con Google está configurado, la solicitud llega sola a la
+     agenda de Verónica. Si no lo está, o si falla, WhatsApp sigue siendo el
+     camino: por eso el botón de WhatsApp nunca depende de esto. */
+  function enviarAlSalon(cita) {
+    var caja = $('copia-estado-nube');
+    if (!BB.nube.configurada()) { caja.hidden = true; return; }
+
+    caja.hidden = false;
+    caja.className = 'aviso';
+    caja.innerHTML = BB.icono('reloj') + '<span>Avisando al salón…</span>';
+
+    BB.nube.solicitar(cita).then(function () {
+      caja.className = 'aviso aviso--ok';
+      caja.innerHTML = BB.icono('check')
+        + '<span><strong>Tu solicitud ya llegó a la agenda del salón.</strong> '
+        + 'Igual conviene mandar el WhatsApp: así Verónica te responde por ahí.</span>';
+    }).catch(function () {
+      caja.className = 'aviso aviso--alta';
+      caja.innerHTML = BB.icono('alerta')
+        + '<span>No se pudo avisar al salón automáticamente. '
+        + '<strong>Mandá el WhatsApp</strong> para que reciban tu solicitud.</span>';
+    });
   }
 
   /* --- Mis solicitudes guardadas -------------------------------------------- */
@@ -370,6 +397,11 @@
     pintarLista();
     llenarServicios();
     pintarMisCitas();
+
+    if (BB.nube.configurada()) {
+      $('texto-acepto').textContent = 'Entiendo que la cita queda por confirmar hasta que el '
+        + 'salón me responda.';
+    }
 
     if (!puedeGuardar) {
       $('aviso-guardado').hidden = false;

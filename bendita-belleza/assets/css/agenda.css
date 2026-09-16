@@ -374,3 +374,38 @@ body.libro .boton--linea { border-color: var(--libro-regla); color: var(--libro-
 
 body.libro .pie { background: var(--libro-regla); }
 body.libro .recado { background: var(--libro-tinta); }
+
+/* --- Tira de sincronización ---------------------------------------------- */
+
+.nube {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e2) var(--e3);
+  padding: var(--e3) var(--e4);
+  margin-bottom: var(--e4);
+  border: 2px solid var(--libro-barra);
+  border-radius: var(--radio-chico);
+  background: var(--papel);
+}
+
+.nube__estado {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex: 1 1 14rem;
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--tinta-media);
+}
+
+.nube__estado .icono { flex: 0 0 auto; }
+
+.nube--ok     { border-color: var(--marca-ok); }
+.nube--ok     .nube__estado .icono { color: var(--marca-ok); }
+.nube--espera .nube__estado .icono { color: var(--pauta-honda); }
+.nube--falla  { border-color: var(--marca-alta); }
+.nube--falla  .nube__estado .icono { color: var(--marca-alta); }
+
+.nube .boton { min-height: 40px; padding: 0.4rem 0.8rem; font-size: 0.6875rem; }

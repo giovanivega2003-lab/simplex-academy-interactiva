@@ -20,6 +20,7 @@
   var datoDanado = false;
   var citaAReprogramar = '';
   var citaDeCalendario = '';
+  var nubeLista = false;          // hay enlace con Google y la clave funciona
 
   /* ======================================================================
      Clave de acceso
@@ -96,6 +97,7 @@
     $('fecha-agenda').value = BB.diaLocal();
     pintarAgenda();
     pintarDuraciones();
+    arrancarNube();
   }
 
   function enviarPorton(evento) {
@@ -209,6 +211,152 @@
 
   function duracionServicio(servicio) {
     return estado.durations[servicio.id] || servicio.duracion;
+  }
+
+  /* ======================================================================
+     Sincronización con Google
+     ====================================================================== */
+
+  function pintarEstadoNube(texto, tono) {
+    $('panel-nube').className = 'nube' + (tono ? ' nube--' + tono : '');
+    $('nube-texto').textContent = texto;
+  }
+
+  function horaCorta() {
+    return new Intl.DateTimeFormat('es-BO', {
+      hour: '2-digit', minute: '2-digit', timeZone: BB.ESTUDIO.zona
+    }).format(new Date());
+  }
+
+  /* Las citas del servidor se pasan por la misma validación que un respaldo.
+     Se revisan de a una: si alguna viniera mal, se descarta esa sola y el
+     resto de la agenda se sigue viendo. */
+  function desdeServidor(citas) {
+    var buenas = [];
+    var descartadas = 0;
+    (citas || []).forEach(function (c) {
+      try {
+        var r = BB.reglas.leerRespaldo({ version: 2, appointments: [c], durations: {} });
+        buenas.push(r.appointments[0]);
+      } catch (error) {
+        descartadas++;
+      }
+    });
+    return { citas: buenas, descartadas: descartadas };
+  }
+
+  function guardarCache() {
+    if (!puedeGuardar) return;
+    try { localStorage.setItem(LLAVE_AGENDA, JSON.stringify(estado)); }
+    catch (error) { puedeGuardar = false; }
+  }
+
+  /* Si en este teléfono había citas que el servidor no tiene, se ofrece
+     subirlas en vez de perderlas sin avisar. */
+  function ofrecerSubir(locales) {
+    var enServidor = {};
+    estado.appointments.forEach(function (c) { enServidor[c.id] = true; });
+    var sueltas = locales.filter(function (c) { return !enServidor[c.id]; });
+
+    if (!sueltas.length) { $('aviso-subir').hidden = true; return; }
+
+    $('aviso-subir').hidden = false;
+    $('aviso-subir').innerHTML = BB.icono('alerta')
+      + '<span>Este teléfono tiene <strong>' + sueltas.length + '</strong> '
+      + (sueltas.length === 1 ? 'cita que no está' : 'citas que no están')
+      + ' en Google. Subilas para no perderlas.<br>'
+      + '<button class="boton boton--linea" type="button" id="boton-subir" '
+      + 'style="margin-top:.6rem">Subir a Google</button></span>';
+
+    $('boton-subir').addEventListener('click', function () {
+      var boton = this;
+      boton.disabled = true;
+      boton.textContent = 'Subiendo…';
+      var pendientes = sueltas.slice();
+      var fallos = 0;
+
+      var siguiente = function () {
+        if (!pendientes.length) {
+          BB.recado(fallos
+            ? 'Se subieron ' + (sueltas.length - fallos) + ' de ' + sueltas.length + '. Probá de nuevo con el resto.'
+            : 'Listo: ' + sueltas.length + (sueltas.length === 1 ? ' cita subida.' : ' citas subidas.'));
+          sincronizar(false);
+          return;
+        }
+        var cita = pendientes.shift();
+        BB.nube.guardar(cita).catch(function () { fallos++; }).then(siguiente, siguiente);
+      };
+      siguiente();
+    });
+  }
+
+  function sincronizar(avisar) {
+    if (!BB.nube.configurada() || !BB.nube.claveAdmin()) return;
+    pintarEstadoNube('Actualizando…', 'espera');
+
+    BB.nube.listar().then(function (respuesta) {
+      var locales = estado.appointments.slice();
+      var leidas = desdeServidor(respuesta.citas);
+      estado.appointments = leidas.citas;
+      nubeLista = true;
+      guardarCache();
+      pintarAgenda();
+      ofrecerSubir(locales);
+      pintarEstadoNube('Al día con Google · ' + horaCorta()
+        + (leidas.descartadas ? ' · ' + leidas.descartadas + ' con datos raros' : ''), 'ok');
+      if (avisar) BB.recado('Agenda actualizada desde Google.');
+    }).catch(function (error) {
+      nubeLista = false;
+      if (error.message === 'sin-clave') { pedirClaveNube(); return; }
+      pintarEstadoNube('Sin conexión con Google. Estás viendo la copia de este teléfono.', 'falla');
+      if (avisar) BB.recado(error.message);
+    });
+  }
+
+  /* Empuja un cambio ya aplicado en pantalla. Si Google no lo acepta, se
+     vuelve a leer del servidor para que lo que ves sea la verdad. */
+  function empujar(promesa) {
+    if (!nubeLista) return;
+    promesa.catch(function (error) {
+      BB.recado('Google no aceptó el cambio: ' + error.message);
+      sincronizar(false);
+    });
+  }
+
+  function pedirClaveNube() {
+    $('nube-clave-campo').value = BB.nube.claveAdmin();
+    $('error-nube').textContent = '';
+    pintarEstadoNube('Falta la clave de Google para ver la agenda compartida.', 'falla');
+    $('dialogo-nube').showModal();
+  }
+
+  function enviarClaveNube(evento) {
+    evento.preventDefault();
+    var clave = $('nube-clave-campo').value.trim();
+    if (!clave) { $('error-nube').textContent = 'Escribí la clave.'; return; }
+    $('nube-probar').disabled = true;
+    $('nube-probar').textContent = 'Probando…';
+
+    BB.nube.probar(clave).then(function () {
+      BB.nube.guardarClaveAdmin(clave);
+      BB.cerrarDialogo($('dialogo-nube'));
+      BB.recado('Conectado con Google.');
+      sincronizar(false);
+    }).catch(function (error) {
+      $('error-nube').textContent = error.message === 'sin-configurar'
+        ? 'Todavía no está pegada la dirección del enlace en config.js.'
+        : error.message;
+    }).then(function () {
+      $('nube-probar').disabled = false;
+      $('nube-probar').textContent = 'Probar y guardar';
+    });
+  }
+
+  function arrancarNube() {
+    if (!BB.nube.configurada()) { $('panel-nube').hidden = true; return; }
+    $('panel-nube').hidden = false;
+    if (!BB.nube.claveAdmin()) { pedirClaveNube(); return; }
+    sincronizar(false);
   }
 
   /* ======================================================================
@@ -400,6 +548,7 @@
       } else return;
 
       guardarAgenda();
+      empujar(BB.nube.estado(a.id, a.status));
       BB.recado(a.kind === 'block'
         ? 'Bloqueo actualizado.'
         : 'Estado actualizado. Avisale a la clienta por WhatsApp.');
@@ -449,6 +598,7 @@
       }
       a.email = correo;
       guardarAgenda();
+      empujar(BB.nube.correo(a.id, correo));
       $('error-cal').textContent = '';
       BB.recado(correo ? 'Correo guardado en la cita.' : 'Correo quitado de la cita.');
     } catch (error) {
@@ -488,6 +638,7 @@
       a.start = inicio;
       a.status = 'pending';
       guardarAgenda();
+      empujar(BB.nube.mover(a.id, fecha, inicio));
       $('fecha-agenda').value = fecha;
       pintarAgenda();
       BB.cerrarDialogo($('dialogo-mover'));
@@ -598,7 +749,7 @@
       var problema = BB.reglas.errorReserva(fecha, inicio, elegido.duracion, estado.appointments);
       if (problema) { refrescarNueva(); throw new Error(problema); }
 
-      estado.appointments.push({
+      var nueva = {
         id: BB.reglas.identificador(),
         kind: 'appointment',
         serviceId: elegido.servicio.id,
@@ -617,9 +768,11 @@
         createdAt: new Date().toISOString(),
         priceMin: elegido.precioMin,
         priceMax: elegido.precioMax
-      });
+      };
+      estado.appointments.push(nueva);
 
       guardarAgenda();
+      empujar(BB.nube.guardar(nueva));
       $('fecha-agenda').value = fecha;
       $('todas-fechas').checked = false;
       pintarAgenda();
@@ -659,14 +812,16 @@
       var problema = BB.reglas.errorReserva(fecha, desde, hasta - desde, estado.appointments);
       if (problema) throw new Error(problema);
 
-      estado.appointments.push({
+      var bloqueo = {
         id: BB.reglas.identificador(), kind: 'block', serviceId: '', variantIndex: 0,
         serviceName: 'Bloqueo', variantName: '', art: false, date: fecha, start: desde,
         duration: hasta - desde, clientName: motivo, phone: '', email: '', notes: '',
         status: 'block', createdAt: new Date().toISOString(), priceMin: 0, priceMax: 0
-      });
+      };
+      estado.appointments.push(bloqueo);
 
       guardarAgenda();
+      empujar(BB.nube.guardar(bloqueo));
       $('fecha-agenda').value = fecha;
       pintarAgenda();
       BB.cerrarDialogo($('dialogo-bloqueo'));
@@ -823,6 +978,17 @@
       } catch (error) {
         BB.recado(error.message);
       }
+    });
+
+    $('nube-actualizar').addEventListener('click', function () { sincronizar(true); });
+    $('nube-clave').addEventListener('click', pedirClaveNube);
+    $('form-nube').addEventListener('submit', enviarClaveNube);
+    $('nube-olvidar').addEventListener('click', function () {
+      BB.nube.olvidarClaveAdmin();
+      nubeLista = false;
+      BB.cerrarDialogo($('dialogo-nube'));
+      pintarEstadoNube('Trabajando solo con la copia de este teléfono.', 'falla');
+      BB.recado('Desconectado de Google. Las citas nuevas no se van a compartir.');
     });
 
     $('cerrar-libro').addEventListener('click', function () {

@@ -334,8 +334,8 @@
 
           <label class="casilla" style="margin-top:1rem">
             <input type="checkbox" id="f-acepto" required>
-            <span>Entiendo que la cita queda por confirmar y que tengo que enviarla por WhatsApp
-              para que el salón la reciba.</span>
+            <span id="texto-acepto">Entiendo que la cita queda por confirmar y que tengo que
+              enviarla por WhatsApp para que el salón la reciba.</span>
           </label>
 
           <p class="error-campo" id="error-solicitud" role="alert"></p>
@@ -390,6 +390,8 @@
             <span class="cifra" id="copia-referencia"></span></p>
         </div>
 
+        <div class="aviso" id="copia-estado-nube" style="margin-top:1.25rem" hidden></div>
+
         <a class="boton boton--sello boton--ancho" id="copia-whatsapp" style="margin-top:1.5rem">
           <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-whatsapp"></use></svg>
           Enviar por WhatsApp
@@ -441,11 +443,13 @@
   </div>
 </noscript>
 
+<script src="assets/js/config.js"></script>
 <script src="assets/js/estudio.js"></script>
 <script src="assets/js/tiempo.js"></script>
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/calendario.js"></script>
 <script src="assets/js/reglas.js"></script>
+<script src="assets/js/nube.js"></script>
 <script src="assets/js/cliente.js"></script>
 </body>
 </html>

@@ -673,6 +673,8 @@ dialog.cerrando::backdrop { opacity: 0; }
 .aviso .icono { margin-top: 0.15em; color: var(--pauta-honda); }
 .aviso--alta { border-color: var(--marca-alta); }
 .aviso--alta .icono { color: var(--marca-alta); }
+.aviso--ok { border-color: var(--marca-ok); }
+.aviso--ok .icono { color: var(--marca-ok); }
 
 /* --- Recado (toast) ------------------------------------------------------ */
 

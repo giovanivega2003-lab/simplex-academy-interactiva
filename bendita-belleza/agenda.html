@@ -108,6 +108,20 @@
 
     <div class="aviso aviso--alta" id="aviso-almacen" hidden></div>
 
+    <div class="nube" id="panel-nube" hidden>
+      <span class="nube__estado">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-reloj"></use></svg>
+        <span id="nube-texto">Sin conectar.</span>
+      </span>
+      <button class="boton boton--linea" type="button" id="nube-actualizar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-descarga"></use></svg>
+        Actualizar
+      </button>
+      <button class="boton boton--quieto" type="button" id="nube-clave">Clave de Google</button>
+    </div>
+
+    <div class="aviso" id="aviso-subir" hidden></div>
+
     <div class="cuentas" id="cuentas"></div>
 
     <div class="filtros">
@@ -375,6 +389,42 @@
   </div>
 </dialog>
 
+<!-- Diálogo: clave de Google ---------------------------------------------- -->
+<dialog id="dialogo-nube" aria-labelledby="titulo-nube">
+  <div class="hoja">
+    <div class="hoja__cabeza">
+      <button class="hoja__cierra" type="button" data-cerrar aria-label="Cerrar">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cerrar"></use></svg>
+      </button>
+      <h2 id="titulo-nube">Clave de Google.</h2>
+      <p class="apunte" style="margin-top:.5rem">Es la que escribiste en el archivo
+        <code>Codigo.gs</code>, en la línea <code>CLAVE_ADMIN</code>.</p>
+    </div>
+    <div class="hoja__cuerpo">
+      <div class="aviso">
+        <svg class="icono" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-llave"></use></svg>
+        <span>Esta clave es la que deja que tu Libro lea y modifique la agenda de Google. Se
+          guarda solo en este aparato y no viaja dentro del sitio. No es la misma con la que
+          abrís el Libro.</span>
+      </div>
+      <form id="form-nube" novalidate style="margin-top:1.25rem">
+        <label class="campo">
+          <span class="rotulo">Clave de administración</span>
+          <input type="password" id="nube-clave-campo" autocomplete="off" inputmode="text"
+                 autocapitalize="none" autocorrect="off" maxlength="200" required
+                 enterkeyhint="go">
+        </label>
+        <p class="error-campo" id="error-nube" role="alert"></p>
+        <button class="boton boton--sello boton--ancho" type="submit" id="nube-probar">
+          Probar y guardar
+        </button>
+      </form>
+      <button class="boton boton--quieto boton--ancho" type="button" id="nube-olvidar"
+              style="margin-top:.75rem">Trabajar sin conexión con Google</button>
+    </div>
+  </div>
+</dialog>
+
 <div id="recado" class="recado" role="status" hidden></div>
 
 <noscript>
@@ -383,12 +433,14 @@
   </div>
 </noscript>
 
+<script src="assets/js/config.js"></script>
 <script src="assets/js/estudio.js"></script>
 <script src="assets/js/tiempo.js"></script>
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/calendario.js"></script>
 <script src="assets/js/reglas.js"></script>
 <script src="assets/js/xlsx.js"></script>
+<script src="assets/js/nube.js"></script>
 <script src="assets/js/libro.js"></script>
 </body>
 </html>

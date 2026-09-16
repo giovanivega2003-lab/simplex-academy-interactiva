@@ -10,7 +10,14 @@ clienta sin darle también el panel de la propietaria.
 | Catálogo y solicitud de cita | `index.html` | Las clientas. Este es el enlace que se comparte. |
 | Libro de citas | `agenda.html` | Solo Verónica. Pide clave y no aparece enlazado desde la página pública. |
 
-No hay servidor, ni base de datos, ni cuentas, ni cobros. Todo corre en el navegador.
+No hay cuentas ni cobros. El sitio corre entero en el navegador.
+
+**Sincronización (opcional).** Por defecto, la solicitud de una clienta llega al salón por
+WhatsApp y Verónica la registra a mano. Si se conecta el enlace con Google —ver
+[`apps-script/GUIA.md`](apps-script/GUIA.md)— las solicitudes llegan solas a una Hoja de cálculo
+y a Google Calendar, la clienta recibe su invitación por correo, y el Libro de citas se ve igual
+desde cualquier aparato. Es gratis y se configura una sola vez. Mientras `assets/js/config.js`
+esté vacío, todo funciona como al principio.
 
 ---
 
@@ -109,6 +116,8 @@ assets/
     sello-*.webp        el logo recortado a disco con transparencia
     precios-*.webp      fotos de los catálogos impresos (grande y miniatura)
   js/
+    config.js           la dirección del enlace con Google (vacío = sin sincronizar)
+    nube.js             hablar con ese enlace
     estudio.js          datos del estudio y catálogo de servicios
     tiempo.js           fechas y horas en hora de Bolivia
     ui.js               iconos, recados, diálogos, descargas
@@ -117,6 +126,9 @@ assets/
     xlsx.js             escritor XLSX mínimo
     cliente.js          la página de la clienta
     libro.js            la agenda de la propietaria
+apps-script/
+  Codigo.gs             el código que corre en la cuenta de Google de Verónica
+  GUIA.md               cómo instalarlo, paso a paso
 ```
 
 Los scripts son clásicos, no módulos ES, a propósito: así el sitio también funciona abriendo
@@ -147,8 +159,10 @@ tocar código; esas se guardan por navegador.
 
 Conviene tenerlo claro para no prometerlo:
 
-- No envía mensajes solo. Prepara el texto y abre WhatsApp; la clienta aprieta enviar.
+- No manda el WhatsApp solo. Prepara el texto y abre WhatsApp; la clienta aprieta enviar.
 - No conoce la disponibilidad real. La página de la clienta valida el horario de atención y que
   la hora no haya pasado, nada más: **pide** una hora, no la reserva. La confirma Verónica.
 - No cobra ni toma anticipos.
-- La agenda no se comparte entre aparatos. Para pasarla a otro teléfono se usa el respaldo JSON.
+- **Sin el enlace con Google**, la agenda no se comparte entre aparatos y las solicitudes hay
+  que registrarlas a mano desde el WhatsApp que llega. Con el enlace puesto, las dos cosas se
+  resuelven.
