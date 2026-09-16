@@ -319,9 +319,44 @@
       guardar();
       pintarMisCitas();
       pintarCopia(cita);
+      copiarAlLibroLocal(cita);
       enviarAlSalon(cita);
     } catch (error) {
       $('error-solicitud').textContent = error.message;
+    }
+  }
+
+  /* --- Copia en el Libro de este mismo aparato ------------------------------- */
+
+  /* La versión anterior del sitio tenía las dos vistas en un solo archivo y
+     compartían el mismo almacenamiento, así que agendar en una se veía al
+     instante en la otra. Eso sigue siendo útil cuando Verónica agenda desde
+     su propio teléfono —una clienta que llega al local, una que llama— y
+     también para probar. Así que la solicitud se copia al Libro de ESTE
+     navegador.
+
+     Entre aparatos distintos esto no puede funcionar, y nunca funcionó: para
+     eso está el enlace con Google. */
+  function copiarAlLibroLocal(cita) {
+    var LLAVE_LIBRO = 'bendita_belleza_agenda_local_v1';
+    try {
+      var crudo = localStorage.getItem(LLAVE_LIBRO);
+      var libro = crudo
+        ? BB.reglas.leerRespaldo(JSON.parse(crudo))
+        : BB.reglas.vacio();
+
+      var yaEsta = libro.appointments.some(function (a) { return a.id === cita.id; });
+      if (yaEsta) return;
+
+      /* Si el horario pisa algo que ya hay en el libro, no se toca nada: el
+         libro de Verónica manda, y ella lo resolverá al ver el WhatsApp. */
+      if (BB.reglas.choca(cita, libro.appointments)) return;
+
+      libro.appointments.push(cita);
+      localStorage.setItem(LLAVE_LIBRO, JSON.stringify(libro));
+    } catch (error) {
+      /* El libro guardado no se pudo leer, o no hay almacenamiento. Se deja
+         como está: nunca conviene pisar la agenda de Verónica. */
     }
   }
 

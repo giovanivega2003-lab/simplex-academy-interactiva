@@ -70,6 +70,17 @@ La clienta también tiene su propia copia local en `index.html`: las solicitudes
 su teléfono, para reenviar el mensaje o volver a guardar la cita en su calendario. Son suyas y
 no llegan al salón hasta que las manda por WhatsApp.
 
+**Agendar desde el propio aparato.** Una solicitud hecha en `index.html` también se copia al
+Libro **de ese mismo navegador**. Sirve cuando Verónica agenda ella misma —una clienta que llega
+al local o que llama— y para probar el sitio: la cita aparece enseguida en el Libro, lista para
+confirmar. Es el comportamiento que tenía la versión de un solo archivo, donde las dos vistas
+compartían el almacenamiento.
+
+Entre aparatos distintos esto no puede funcionar, y en la versión anterior tampoco funcionaba:
+solo lo parecía cuando una misma persona probaba las dos vistas en un mismo teléfono. Para que
+la solicitud de una clienta, hecha en **su** celular, llegue al Libro de Verónica, hace falta el
+enlace con Google.
+
 ---
 
 ## Cómo funciona el calendario

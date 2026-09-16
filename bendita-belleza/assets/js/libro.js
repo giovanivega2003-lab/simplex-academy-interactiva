@@ -314,10 +314,13 @@
   }
 
   /* Empuja un cambio ya aplicado en pantalla. Si Google no lo acepta, se
-     vuelve a leer del servidor para que lo que ves sea la verdad. */
-  function empujar(promesa) {
+     vuelve a leer del servidor para que lo que ves sea la verdad.
+
+     Recibe una función, no una promesa: sin conexión no hay que ni siquiera
+     armar la petición, y así no queda ningún rechazo suelto. */
+  function empujar(hacer) {
     if (!nubeLista) return;
-    promesa.catch(function (error) {
+    hacer().catch(function (error) {
       BB.recado('Google no aceptó el cambio: ' + error.message);
       sincronizar(false);
     });
@@ -548,7 +551,7 @@
       } else return;
 
       guardarAgenda();
-      empujar(BB.nube.estado(a.id, a.status));
+      empujar(function () { return BB.nube.estado(a.id, a.status); });
       BB.recado(a.kind === 'block'
         ? 'Bloqueo actualizado.'
         : 'Estado actualizado. Avisale a la clienta por WhatsApp.');
@@ -598,7 +601,7 @@
       }
       a.email = correo;
       guardarAgenda();
-      empujar(BB.nube.correo(a.id, correo));
+      empujar(function () { return BB.nube.correo(a.id, correo); });
       $('error-cal').textContent = '';
       BB.recado(correo ? 'Correo guardado en la cita.' : 'Correo quitado de la cita.');
     } catch (error) {
@@ -638,7 +641,7 @@
       a.start = inicio;
       a.status = 'pending';
       guardarAgenda();
-      empujar(BB.nube.mover(a.id, fecha, inicio));
+      empujar(function () { return BB.nube.mover(a.id, fecha, inicio); });
       $('fecha-agenda').value = fecha;
       pintarAgenda();
       BB.cerrarDialogo($('dialogo-mover'));
@@ -772,7 +775,7 @@
       estado.appointments.push(nueva);
 
       guardarAgenda();
-      empujar(BB.nube.guardar(nueva));
+      empujar(function () { return BB.nube.guardar(nueva); });
       $('fecha-agenda').value = fecha;
       $('todas-fechas').checked = false;
       pintarAgenda();
@@ -821,7 +824,7 @@
       estado.appointments.push(bloqueo);
 
       guardarAgenda();
-      empujar(BB.nube.guardar(bloqueo));
+      empujar(function () { return BB.nube.guardar(bloqueo); });
       $('fecha-agenda').value = fecha;
       pintarAgenda();
       BB.cerrarDialogo($('dialogo-bloqueo'));
