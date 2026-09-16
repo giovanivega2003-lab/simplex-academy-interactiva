@@ -25,8 +25,16 @@ No hay servidor, ni base de datos, ni cuentas, ni cobros. Todo corre en el naveg
    - Clientas → `https://giovanivega2003-lab.github.io/Bendita-Belleza-/`
    - Agenda → `https://giovanivega2003-lab.github.io/Bendita-Belleza-/agenda.html`
 
-Si preferís que se publique solo con cada cambio, en `.github/workflows/pages.yml` queda un
-flujo de trabajo listo: activalo eligiendo **GitHub Actions** en vez de *Deploy from a branch*.
+> **El repositorio tiene que ser público.** En el plan gratuito de GitHub, Pages solo publica
+> repositorios públicos; con el repositorio privado la opción no aparece o falla. Hacerlo
+> público no expone nada delicado: el sitio está pensado para que lo vea cualquiera, y las
+> citas nunca están en el repositorio — viven en el navegador de Verónica. Se cambia en
+> *Settings → General → Danger Zone → Change repository visibility*.
+
+En `.github/workflows/pages.yml` queda un flujo de trabajo alternativo, que **no corre solo**:
+solo se lanza a mano desde la pestaña *Actions*, y sirve si algún día preferís publicar con
+GitHub Actions en vez de *Deploy from a branch*. Con el camino simple de arriba no hace falta
+tocarlo.
 
 El archivo `.nojekyll` evita que GitHub procese el sitio con Jekyll, y `robots.txt` le pide a
 los buscadores que no indexen `agenda.html`.

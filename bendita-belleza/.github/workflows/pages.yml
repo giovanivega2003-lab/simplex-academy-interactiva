@@ -1,11 +1,14 @@
-# Publica el sitio en GitHub Pages con cada cambio en main.
-# Para usarlo: Settings -> Pages -> Source: GitHub Actions.
-# (Si preferís lo más simple, elegí "Deploy from a branch" y no hace falta este archivo.)
+# Publicar el sitio en GitHub Pages usando GitHub Actions.
+#
+# Este flujo NO se ejecuta solo. Solo corre cuando lo lanzás a mano desde la
+# pestaña Actions ("Run workflow"), porque la forma simple de publicar es
+# Settings -> Pages -> Deploy from a branch -> main / (root), y ahí este
+# archivo no hace falta.
+#
+# Si lo lanzás, él mismo activa Pages con Actions como origen.
 name: Publicar en GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
