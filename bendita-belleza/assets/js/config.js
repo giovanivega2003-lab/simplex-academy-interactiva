@@ -19,5 +19,5 @@
 window.BB = window.BB || {};
 
 window.BB.config = {
-  URL_SCRIPT: ''
+  URL_SCRIPT: 'https://script.google.com/macros/s/AKfycbwELIUMCe9Gz0up3hrwB75uQen6ntJ2iF0aF3ZioOahO2_o2ZmnjrjLgzDGwWngqKzC/exec'
 };
