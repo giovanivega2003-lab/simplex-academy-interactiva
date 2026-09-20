@@ -15,25 +15,21 @@ Es gratis: usa tu propia cuenta de Google.
 
 ---
 
-## Paso 1 — Crear la Hoja de cálculo
+## Paso 1 — Abrir el editor de código
 
-1. Entrá a [sheets.new](https://sheets.new) con la cuenta de Google del salón.
-2. Ponele un nombre arriba a la izquierda, por ejemplo **Agenda Bendita Belleza**.
+Entrá a [script.new](https://script.new) con la cuenta de Google del salón.
 
-Eso es todo. No escribas nada adentro: las columnas se crean solas.
-
----
-
-## Paso 2 — Abrir el editor de código
-
-En esa misma hoja, arriba en el menú: **Extensiones → Apps Script**.
-
-Se abre una pestaña nueva con un archivo llamado `Código.gs` que trae unas pocas líneas de
+Se abre un proyecto nuevo con un archivo llamado `Código.gs` que trae unas pocas líneas de
 ejemplo.
 
+> **La Hoja de cálculo no hace falta crearla.** El enlace la crea él mismo la primera vez que
+> corre, con el nombre *Agenda Bendita Belleza*, y en el paso 4 te dice dónde quedó. Si algún
+> día esa hoja se borra o Google la bloquea, el enlace hace una nueva y sigue anotando citas en
+> vez de dejar de recibirlas.
+
 ---
 
-## Paso 3 — Pegar el código
+## Paso 2 — Pegar el código
 
 1. **Borrá todo** lo que haya en ese archivo (tocá adentro, `Ctrl+A`, `Suprimir`).
 2. Abrí el archivo **`apps-script/Codigo.gs`** de este repositorio, copiá **todo** su contenido
@@ -42,7 +38,7 @@ ejemplo.
 
 ---
 
-## Paso 4 — Poner tu clave
+## Paso 3 — Poner tu clave
 
 Cerca del principio del código vas a ver esta línea:
 
@@ -65,7 +61,7 @@ Guardá con el ícono del diskette o `Ctrl+S`.
 
 ---
 
-## Paso 5 — Dar los permisos
+## Paso 4 — Dar los permisos
 
 Arriba hay un desplegable de funciones. Elegí **`probar`** y tocá **Ejecutar** (▶).
 
@@ -82,11 +78,15 @@ Le estás dando permiso a tu propio script para escribir en tu hoja y en tu cale
 que vos puede modificarlo.
 
 Si al terminar el registro de ejecución dice **«Todo en orden»**, el paso salió bien. Si dice que
-falta cambiar `CLAVE_ADMIN`, volvé al paso 4.
+falta cambiar `CLAVE_ADMIN`, volvé al paso 3.
+
+En ese mismo registro, la línea **`Planilla:`** trae el enlace de la Hoja de cálculo que acabás
+de crear sin querer. **Guardala en favoritos**: ahí van a ir quedando todas las citas, y desde
+*Archivo → Descargar* la bajás como Excel cuando quieras.
 
 ---
 
-## Paso 6 — Publicar el enlace
+## Paso 5 — Publicar el enlace
 
 1. Arriba a la derecha: **Implementar → Nueva implementación**.
 2. Tocá el engranaje ⚙ junto a *Seleccionar tipo* y elegí **Aplicación web**.
@@ -100,7 +100,7 @@ falta cambiar `CLAVE_ADMIN`, volvé al paso 4.
 > pueda dejarte la solicitud sin que ellas tengan cuenta de Google. Lo único que alguien sin tu
 > clave puede hacer con esa dirección es **dejar una solicitud nueva**, que entra como «por
 > confirmar» y la ves vos. Para **leer** tu agenda o **cambiar** algo hace falta la clave del
-> paso 4. Además el script rechaza los datos mal formados y limita a 40 solicitudes nuevas por
+> paso 3. Además el script rechaza los datos mal formados y limita a 40 solicitudes nuevas por
 > día.
 
 Al final te muestra una **URL de la aplicación web**. Es larga y termina en **`/exec`**:
@@ -113,7 +113,7 @@ https://script.google.com/macros/s/AKfycb............/exec
 
 ---
 
-## Paso 7 — Pegarla en el sitio
+## Paso 6 — Pegarla en el sitio
 
 Pegá esa dirección en el archivo **`assets/js/config.js`** de este repositorio, entre las
 comillas:
@@ -137,11 +137,11 @@ En un par de minutos GitHub vuelve a publicar el sitio con el enlace puesto.
 
 ---
 
-## Paso 8 — Conectar el Libro
+## Paso 7 — Conectar el Libro
 
 1. Abrí el **Libro de citas** y entrá con tu clave de siempre.
 2. Aparece una franja arriba que pide la **clave de Google**.
-3. Escribí la del **paso 4** y tocá **Probar y guardar**.
+3. Escribí la del **paso 3** y tocá **Probar y guardar**.
 
 Si dice **«Al día con Google»**, ya está. Si en este teléfono tenías citas que Google no tiene,
 te va a ofrecer **subirlas** para no perderlas.
@@ -161,13 +161,23 @@ te va a ofrecer **subirlas** para no perderlas.
 ## Si algo falla
 
 **«Clave de administración incorrecta»**
-La clave del Libro no coincide con la del paso 4. Fijate en mayúsculas y espacios de más al
+La clave del Libro no coincide con la del paso 3. Fijate en mayúsculas y espacios de más al
 copiar.
 
+**«No se pudo hablar con Google»** (o «Failed to fetch» si tu navegador está en inglés)
+Google no contestó con datos: te mandó a una pantalla de inicio de sesión. Es la señal de que
+la implementación quedó en **«Solo yo»**. Para comprobarlo sin tocar nada, pegá tu dirección
+`/exec` en una pestaña del navegador: si está bien, se ve un texto que empieza con
+`{"ok":true`; si te pide iniciar sesión o dice que no tenés permiso, el acceso está mal.
+
+Se arregla en **Implementar → Gestionar implementaciones → lápiz ✏**. Ojo: Apps Script nunca
+dice «público» ni «privado», y los desplegables **no se ven hasta que tocás el lápiz**. El
+ajuste se llama **«Quién tiene acceso»** y tiene que decir **Cualquier persona** (no «Cualquier
+persona con una cuenta de Google»: tus clientas no tienen por qué tener una).
+
 **«La respuesta de Google no se entendió»**
-Casi siempre es que en el paso 6 quedó *Quién tiene acceso* en «Solo yo». Volvé a
-**Implementar → Gestionar implementaciones**, editá con el lápiz y cambialo a
-**Cualquier persona**.
+Lo mismo de arriba, o una implementación con código viejo. Revisá *Quién tiene acceso* y, de
+paso, poné **Versión: Nueva versión**.
 
 **«Sin conexión con Google»**
 Puede ser señal o que Google tardó. El Libro sigue mostrando la copia de tu teléfono; tocá
@@ -177,6 +187,16 @@ Puede ser señal o que Google tardó. El Libro sigue mostrando la copia de tu te
 El script guarda la cita igual aunque el calendario falle, a propósito: perder un evento es
 molesto, perder la cita sería grave. Volvé a correr **`probar`** en el editor y revisá que los
 permisos de Calendar estén dados.
+
+**La Hoja dice «No puedes acceder a este documento porque infringe nuestros Términos del Servicio»**
+Es un bloqueo automático de Google Drive sobre ese archivo, no un problema del código. Pasa a
+veces con archivos recién creados y no siempre hay motivo real. Como el enlace sabe hacerse una
+hoja nueva, la salida es corta: en el editor de Apps Script, **Configuración del proyecto ⚙ →
+Propiedades del script**, borrá la propiedad `bendita_belleza_libro` y volvé a correr **`probar`**.
+Te crea una planilla nueva y te deja su enlace en el registro.
+
+Si la hoja bloqueada tenía citas que no querés perder, pedí la revisión desde Drive
+(clic derecho sobre el archivo → *Solicitar revisión*) antes de darla por perdida.
 
 **Cambiaste el código y no pasa nada**
 Cada cambio necesita una implementación nueva: **Implementar → Gestionar implementaciones →**
@@ -188,7 +208,7 @@ lápiz ✏ **→ Versión: Nueva → Implementar**. La dirección `/exec` no cam
 
 - **Dónde quedan tus citas:** en tu Hoja de cálculo y tu Calendar, dentro de tu cuenta de
   Google. El sitio no guarda nada; solo pregunta.
-- **Quién puede leerlas:** vos, y quien tenga la clave del paso 4. Esa clave no está escrita en
+- **Quién puede leerlas:** vos, y quien tenga la clave del paso 3. Esa clave no está escrita en
   ningún archivo del sitio: se guarda solo en el navegador donde la escribiste.
 - **Qué puede hacer un desconocido con la dirección `/exec`:** dejar una solicitud de cita, que
   entra como «por confirmar». Nada más. No puede leer, ni borrar, ni cambiar.

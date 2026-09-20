@@ -56,6 +56,13 @@
       body: JSON.stringify(cuerpo),
       redirect: 'follow',
       signal: aborto ? aborto.signal : undefined
+    }).catch(function (error) {
+      /* El navegador dice «Failed to fetch» tanto cuando no hay internet como
+         cuando Google, en vez de contestar, manda a una pantalla de inicio de
+         sesión — que es lo que pasa si la implementación quedó en «Solo yo».
+         Desde acá las dos se ven igual, así que el aviso nombra las dos. */
+      if (error && error.name === 'AbortError') throw error;
+      throw new Error('No se pudo hablar con Google. Revisá que tengas internet y que el enlace esté implementado para «Cualquier persona»: en Apps Script, Implementar → Gestionar implementaciones → lápiz ✏ → «Quién tiene acceso».');
     }).then(function (respuesta) {
       if (!respuesta.ok) throw new Error('Google respondió ' + respuesta.status + '.');
       return respuesta.text();

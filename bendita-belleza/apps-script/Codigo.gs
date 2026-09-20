@@ -106,14 +106,55 @@ function responder(objeto) {
 
 /* --- La hoja ------------------------------------------------------- */
 
+/* Dónde anota las citas.
+
+   Funciona de las dos maneras. Si este script vive adentro de una Hoja de
+   cálculo, usa esa. Si es un script suelto —creado en script.new—, busca la
+   suya y, la primera vez, la crea él mismo. El identificador queda guardado
+   en el propio proyecto, así que siempre vuelve a la misma planilla.
+
+   Que sepa crearla no es un lujo: si la hoja se borra por error o Google la
+   bloquea, el enlace sigue anotando en una nueva en vez de dejar de recibir
+   citas. Perder un evento del calendario es molesto; perder la cita de una
+   clienta sería grave. */
+var CLAVE_LIBRO = 'bendita_belleza_libro';
+var NOMBRE_LIBRO = 'Agenda Bendita Belleza';
+
+function libro() {
+  var propio = SpreadsheetApp.getActiveSpreadsheet();
+  if (propio) return propio;
+
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty(CLAVE_LIBRO);
+  if (id) {
+    try {
+      return SpreadsheetApp.openById(id);
+    } catch (error) {
+      props.deleteProperty(CLAVE_LIBRO);
+    }
+  }
+
+  var nuevo = SpreadsheetApp.create(NOMBRE_LIBRO);
+  props.setProperty(CLAVE_LIBRO, nuevo.getId());
+  return nuevo;
+}
+
 function hoja() {
-  var libro = SpreadsheetApp.getActiveSpreadsheet();
-  var h = libro.getSheetByName(HOJA);
+  var l = libro();
+  var h = l.getSheetByName(HOJA);
   if (!h) {
-    h = libro.insertSheet(HOJA);
+    h = l.insertSheet(HOJA);
     h.appendRow(COLUMNAS);
     h.setFrozenRows(1);
     h.getRange(1, 1, 1, COLUMNAS.length).setFontWeight('bold');
+    /* Una planilla recién creada trae una pestaña vacía de fábrica. Si sigue
+       ahí y sin nada escrito, se saca: así la hoja se abre directamente en
+       las citas y no en una pestaña en blanco. */
+    l.getSheets().forEach(function (otra) {
+      if (otra.getSheetId() !== h.getSheetId() && otra.getLastRow() === 0 && otra.getLastColumn() === 0) {
+        l.deleteSheet(otra);
+      }
+    });
   }
   if (h.getLastRow() === 0) {
     h.appendRow(COLUMNAS);
@@ -398,6 +439,7 @@ function probar() {
   var h = hoja();
   var calendario = CalendarApp.getDefaultCalendar().getName();
   Logger.log('Hoja lista: ' + h.getName() + ' | filas: ' + Math.max(0, h.getLastRow() - 1));
+  Logger.log('Planilla: ' + h.getParent().getUrl());
   Logger.log('Calendario: ' + calendario);
   if (CLAVE_ADMIN === 'cambiá-esto-por-una-clave-larga-y-tuya') {
     throw new Error('Falta cambiar CLAVE_ADMIN arriba del archivo por una clave tuya.');
