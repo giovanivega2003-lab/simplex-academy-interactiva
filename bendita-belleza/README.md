@@ -16,8 +16,11 @@ No hay cuentas ni cobros. El sitio corre entero en el navegador.
 WhatsApp y Verónica la registra a mano. Si se conecta el enlace con Google —ver
 [`apps-script/GUIA.md`](apps-script/GUIA.md)— las solicitudes llegan solas a una Hoja de cálculo
 y a Google Calendar, la clienta recibe su invitación por correo, y el Libro de citas se ve igual
-desde cualquier aparato. Es gratis y se configura una sola vez. Mientras `assets/js/config.js`
-esté vacío, todo funciona como al principio.
+desde cualquier aparato. Es gratis y se configura una sola vez.
+
+**Hoy está apagada a propósito:** `assets/js/config.js` tiene la dirección vacía, así que el
+sitio funciona como al principio y no espera nada de Google. Para encenderla se pega ahí la
+dirección `/exec` y nada más — no hay otro cambio que hacer.
 
 ---
 
