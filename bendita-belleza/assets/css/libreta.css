@@ -631,7 +631,21 @@ dialog.cerrando::backdrop { opacity: 0; }
 
 .hoja__cabeza h2 { font-size: clamp(1.6rem, 6vw, 2.2rem); }
 
+/* Un paso del diálogo (el formulario, la copia) envuelve su propia cabeza y su
+   propio cuerpo. Ese envoltorio tiene que dejar pasar la altura: si crece con
+   su contenido, .hoja__cuerpo nunca llega a ser un contenedor desplazable y el
+   final del formulario queda fuera del diálogo, sin forma de alcanzarlo con el
+   dedo. El :not([hidden]) no es adorno: sin él este display:flex le gana a la
+   regla del navegador y el paso oculto se vería. */
+.hoja > :not(.hoja__cabeza):not(.hoja__cuerpo):not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .hoja__cuerpo {
+  flex: 1 1 auto;
+  min-height: 0;
   padding: var(--e5);
   overflow-y: auto;
   overscroll-behavior: contain;
